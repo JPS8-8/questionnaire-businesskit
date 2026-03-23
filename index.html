@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnostic Projet — Business Kit</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C8A24E;
+    --gold-light: #F5E6B8;
+    --gold-bg: rgba(200,162,78,0.08);
+    --dark: #1A1A2E;
+    --dark-mid: #22223A;
+    --cream: #FFF9EE;
+    --cream-dark: #F0E6D3;
+    --text: #2D2D3A;
+    --text-light: #6B6B7B;
+    --accent: #E85D3A;
+    --green: #2A9D6E;
+    --green-light: #E8F5EF;
+    --radius: 14px;
+    --shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--text);
+    background: var(--cream);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ======== HEADER ======== */
+  .header {
+    background: var(--dark);
+    padding: 1.6rem 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 40% 80%, rgba(200,162,78,0.1) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 20%, rgba(232,93,58,0.06) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .header-inner {
+    max-width: 640px; margin: 0 auto;
+    position: relative; z-index: 1;
+  }
+  .header .badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold), #D4AF5B);
+    color: var(--dark);
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 0.3rem 1rem; border-radius: 50px;
+    margin-bottom: 1rem;
+  }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    color: white; line-height: 1.25;
+    margin-bottom: 0.6rem;
+  }
+  .header h1 span { color: var(--gold-light); }
+  .header p {
+    font-size: 0.92rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.6;
+    max-width: 480px; margin: 0 auto;
+  }
+
+  /* ======== PROGRESS ======== */
+  .progress-section {
+    max-width: 640px; margin: 0 auto;
+    padding: 1.8rem 1.5rem 0;
+  }
+  .progress-labels {
+    display: flex; justify-content: space-between;
+    margin-bottom: 0.6rem;
+  }
+  .progress-label {
+    font-size: 0.72rem; font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    transition: color 0.3s;
+    text-align: center;
+    flex: 1;
+  }
+  .progress-label.active { color: var(--gold); }
+  .progress-label.done { color: var(--green); }
+  .progress-track {
+    width: 100%; height: 6px;
+    background: var(--cream-dark);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--accent));
+    border-radius: 3px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+  }
+  .progress-meta {
+    display: flex; justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+  .progress-step-text {
+    font-size: 0.8rem; font-weight: 600;
+    color: var(--dark);
+  }
+  .progress-time {
+    font-size: 0.78rem;
+    color: var(--text-light);
+    display: flex; align-items: center; gap: 0.3rem;
+  }
+
+  /* ======== FORM CONTAINER ======== */
+  .form-container {
+    max-width: 640px; margin: 1.5rem auto 3rem;
+    padding: 0 1.5rem;
+  }
+
+  /* ======== STEP ======== */
+  .step {
+    display: none;
+    animation: fadeUp 0.4s ease both;
+  }
+  .step.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+  }
+
+  .step-header {
+    display: flex; align-items: center; gap: 0.7rem;
+    margin-bottom: 0.4rem;
+  }
+  .step-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.15rem; flex-shrink: 0;
+  }
+  .step-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem; color: var(--dark);
+  }
+  .step-intro {
+    font-size: 0.88rem; color: var(--text-light);
+    line-height: 1.6; margin-bottom: 1.8rem;
+    padding-left: 0; /* could add indent matching icon */
+  }
+
+  /* ======== FORM ELEMENTS ======== */
+  .field { margin-bottom: 1.5rem; }
+  .field:last-child { margin-bottom: 0; }
+
+  .field label {
+    display: block;
+    font-size: 0.88rem; font-weight: 700;
+    color: var(--dark); margin-bottom: 0.2rem;
+  }
+  .field .hint {
+    font-size: 0.78rem; color: var(--text-light);
+    line-height: 1.5; margin-bottom: 0.6rem;
+  }
+
+  .field input[type="text"],
+  .field input[type="email"],
+  .field input[type="tel"],
+  .field input[type="number"],
+  .field textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1.5px solid var(--cream-dark);
+    border-radius: 10px;
+    font-family: inherit; font-size: 0.92rem;
+    color: var(--text);
+    background: var(--cream);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    resize: vertical;
+  }
+  .field input:focus,
+  .field textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(200,162,78,0.12);
+  }
+  .field input::placeholder,
+  .field textarea::placeholder { color: #B8B6C0; }
+
+  .field textarea { min-height: 90px; }
+
+  /* Chips / Options */
+  .chips {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+  }
+  .chip {
+    padding: 0.55rem 1.1rem;
+    border: 1.5px solid var(--cream-dark);
+    border-radius: 50px;
+    font-size: 0.85rem; font-weight: 500;
+    color: var(--text);
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .chip:hover { border-color: var(--gold); background: var(--gold-bg); }
+  .chip.selected {
+    border-color: var(--gold);
+    background: var(--gold-bg);
+    color: var(--dark);
+    font-weight: 600;
+  }
+  .chip.selected::before {
+    content: '✓ ';
+    color: var(--gold);
+  }
+
+  /* Range / Slider custom */
+  .range-display {
+    text-align: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem; color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .range-display span { font-size: 0.9rem; color: var(--text-light); font-family: 'Plus Jakarta Sans', sans-serif; }
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%; height: 8px;
+    background: var(--cream-dark);
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 2px 8px rgba(232,93,58,0.35);
+    cursor: pointer;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 24px; height: 24px;
+    border-radius: 50%; border: none;
+    background: var(--accent);
+    box-shadow: 0 2px 8px rgba(232,93,58,0.35);
+    cursor: pointer;
+  }
+  .range-labels {
+    display: flex; justify-content: space-between;
+    font-size: 0.75rem; color: var(--text-light);
+    margin-top: 0.3rem;
+  }
+
+  /* ======== NAVIGATION ======== */
+  .nav-buttons {
+    display: flex; gap: 1rem;
+    margin-top: 2rem;
+  }
+  .btn-back {
+    padding: 0.85rem 1.8rem;
+    border: 1.5px solid var(--cream-dark);
+    background: white;
+    border-radius: 50px;
+    font-family: inherit; font-size: 0.92rem;
+    font-weight: 600; color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-back:hover { border-color: var(--dark); color: var(--dark); }
+  .btn-next {
+    flex: 1;
+    padding: 0.85rem 1.8rem;
+    background: var(--accent);
+    color: white; border: none;
+    border-radius: 50px;
+    font-family: inherit; font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(232,93,58,0.25);
+  }
+  .btn-next:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232,93,58,0.35); }
+  .btn-submit {
+    flex: 1;
+    padding: 0.85rem 1.8rem;
+    background: var(--green);
+    color: white; border: none;
+    border-radius: 50px;
+    font-family: inherit; font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(42,157,110,0.25);
+  }
+  .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(42,157,110,0.35); }
+
+  /* ======== REASSURANCE BAR ======== */
+  .reassurance {
+    max-width: 640px; margin: 0 auto 2rem;
+    padding: 0 1.5rem;
+  }
+  .reassurance-inner {
+    background: white;
+    border-radius: var(--radius);
+    padding: 1rem 1.3rem;
+    box-shadow: var(--shadow);
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .reassurance-inner .r-icon { font-size: 1.3rem; flex-shrink: 0; }
+  .reassurance-inner p { font-size: 0.82rem; color: var(--text-light); line-height: 1.5; }
+  .reassurance-inner p strong { color: var(--dark); }
+
+  /* ======== SUCCESS SCREEN ======== */
+  .success-screen {
+    display: none;
+    max-width: 640px; margin: 2rem auto;
+    padding: 0 1.5rem;
+    animation: fadeUp 0.5s ease both;
+  }
+  .success-screen.visible { display: block; }
+
+  .success-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 3rem 2.5rem;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .success-emoji { font-size: 3.5rem; margin-bottom: 1rem; }
+  .success-card h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem; color: var(--dark);
+    margin-bottom: 0.8rem;
+  }
+  .success-card .sub {
+    font-size: 1rem; color: var(--text-light);
+    line-height: 1.7; margin-bottom: 2rem;
+    max-width: 440px; margin-left: auto; margin-right: auto;
+  }
+  .success-card .sub strong { color: var(--dark); }
+
+  .success-timeline {
+    text-align: left;
+    max-width: 380px;
+    margin: 0 auto 2rem;
+  }
+  .s-step {
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding-bottom: 1.2rem;
+    position: relative;
+  }
+  .s-step:last-child { padding-bottom: 0; }
+  .s-step:not(:last-child)::before {
+    content: '';
+    position: absolute; left: 17px; top: 36px; bottom: 0;
+    width: 2px; background: var(--cream-dark);
+  }
+  .s-num {
+    width: 36px; height: 36px; min-width: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem; font-weight: 700;
+    position: relative; z-index: 2;
+  }
+  .s-step:nth-child(1) .s-num { background: var(--green-light); color: var(--green); }
+  .s-step:nth-child(2) .s-num { background: rgba(200,162,78,0.12); color: var(--gold); }
+  .s-step:nth-child(3) .s-num { background: rgba(232,93,58,0.1); color: var(--accent); }
+  .s-step p { font-size: 0.88rem; color: var(--text); line-height: 1.5; margin-top: 0.3rem; }
+  .s-step p strong { color: var(--dark); }
+
+  .success-footer {
+    background: var(--green-light);
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    display: flex; align-items: center; gap: 0.6rem;
+    max-width: 420px; margin: 0 auto;
+  }
+  .success-footer span { font-size: 1.3rem; }
+  .success-footer p { font-size: 0.85rem; color: var(--text); }
+  .success-footer p strong { color: var(--green); }
+
+  /* ======== FOOTER ======== */
+  footer {
+    max-width: 640px; margin: 2rem auto;
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 0.78rem; color: var(--text-light);
+    border-top: 1px solid var(--cream-dark);
+  }
+
+  /* ======== RESPONSIVE ======== */
+  @media (max-width: 600px) {
+    .header { padding: 1.3rem 1.2rem; }
+    .step-card { padding: 1.5rem; }
+    .success-card { padding: 2rem 1.5rem; }
+    .chips { gap: 0.4rem; }
+    .chip { padding: 0.5rem 0.9rem; font-size: 0.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ======== HEADER ======== -->
+<div class="header">
+  <div class="header-inner">
+    <div class="badge">Étape 3 sur 4</div>
+    <h1>Parlez-nous de <span>votre projet</span></h1>
+    <p>Quelques questions simples pour personnaliser votre Business Kit. Pas de mauvaise réponse — on s'adapte à votre niveau d'avancement.</p>
+  </div>
+</div>
+
+<!-- ======== PROGRESS ======== -->
+<div class="progress-section">
+  <div class="progress-labels">
+    <span class="progress-label active" data-block="0">Vous</span>
+    <span class="progress-label" data-block="1">Votre offre</span>
+    <span class="progress-label" data-block="2">Vos chiffres</span>
+    <span class="progress-label" data-block="3">Contexte</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="progress-meta">
+    <span class="progress-step-text" id="progressText">Question 1 sur 15</span>
+    <span class="progress-time">⏱️ ~10 min</span>
+  </div>
+</div>
+
+<!-- ======== FORM ======== -->
+<div class="form-container" id="formContainer">
+
+  <!-- ==================== BLOC 1 : VOUS ET VOTRE VISION ==================== -->
+
+  <!-- Q1 -->
+  <div class="step active" data-step="1" data-block="0">
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(200,162,78,0.12);">👋</div>
+        <h2>Faisons connaissance</h2>
+      </div>
+      <p class="step-intro">On commence doucement. Dites-nous comment vous vous appelez.</p>
+
+      <div class="field">
+        <label>Votre prénom</label>
+        <div class="hint">C'est ce prénom qu'on utilisera dans votre Business Kit.</div>
+        <input type="text" id="q1_prenom" placeholder="Marie">
+      </div>
+      <div class="field">
+        <label>Votre nom</label>
+        <input type="text" id="q1_nom" placeholder="Dupont">
+      </div>
+      <div class="field">
+        <label>Votre email</label>
+        <div class="hint">Pour vous envoyer votre Kit dans 48h.</div>
+        <input type="email" id="q1_email" placeholder="marie@exemple.com">
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn-next" onclick="goNext()">C'est parti → </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="step" data-step="2" data-block="0">
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(200,162,78,0.12);">💡</div>
+        <h2>Votre idée de projet</h2>
+      </div>
+      <p class="step-intro">En une phrase simple, même si c'est encore flou. Il n'y a pas de mauvaise réponse.</p>
+
+      <div class="field">
+        <label>Quel est votre projet ?</label>
+        <div class="hint">Exemples : "Ouvrir un salon de thé à Lyon", "Vendre des formations en ligne sur le bien-être", "J'ai une idée autour de la mode éthique mais c'est pas encore clair".</div>
+        <textarea id="q2" placeholder="Décrivez votre idée en quelques mots..."></textarea>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="goBack()">← Retour</button>
+        <button class="btn-next" onclick="goNext()">Continuer →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="step" data-step="3" data-block="0">
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(200,162,78,0.12);">🔥</div>
+        <h2>Votre motivation</h2>
+      </div>
+      <p class="step-intro">Comprendre votre "pourquoi" nous aide à rédiger un résumé exécutif percutant — c'est la première chose qu'un financeur lira.</p>
+
+      <div class="field">
+        <label>Pourquoi ce projet ? Qu'est-ce qui vous donne envie de vous lancer ?</label>
+        <div class="hint">Envie de liberté, passion, opportunité repérée, expérience personnelle… Tout est bon.</div>
+        <textarea id="q3" placeholder="Ex : Je suis passionnée de naturopathie depuis 10 ans et je veux en faire mon métier..."></textarea>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="goBack()">← Retour</button>
+        <button class="btn-next" onclick="goNext()">Continuer →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="step" data-step="4" data-block="0">
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(200,162,78,0.12);">🧭</div>
+        <h2>Votre situation actuelle</h2>
+      </div>
+      <p class="step-intro">Ça nous aide à adapter le calendrier de lancement et les aides auxquelles vous pourriez avoir droit.</p>
+
+      <div class="field">
+        <label>Vous êtes actuellement…</label>
+        <div class="chips" data-name="q4">
+          <div class="chip" data-value="Salarié(e) en poste">Salarié(e) en poste</div>
+          <div class="chip" data-value="En reconversion">En reconversion</div>
+          <div class="chip" data-value="Demandeur d'emploi">Demandeur d'emploi</div>
+          <div class="chip" data-value="Étudiant(e)">Étudiant(e)</div>
+          <div class="chip" data-value="Déjà entrepreneur">Déjà entrepreneur</div>
+          <div class="chip" data-value="Autre">Autre</div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="goBack()">← Retour</button>
+        <button class="btn-next" onclick="goNext()">Continuer →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== BLOC 2 : VOTRE OFFRE ET VOTRE CIBLE ==================== -->
+
+  <!-- Q5 -->
+  <div class="step" data-step="5" data-block="1">
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(232,93,58,0.1);">🎁</div>
+        <h2>Ce que vous vendriez</h2>
+      </div>
+      <p class="step-intro">On entre dans le concret. Même si c'est approximatif, ça nous donne la base.</p>
+
+      <div class="field">
+        <label>Que vendriez-vous concrètement ?</label>
+        <div class="chips" data-name="q5" data-multi="true">
+          <div class="chip" data-value="Des produits physiques">Des produits physiques</div>
+          <div class="chip" data-value="Des services / prestations">Des services / prestations</div>
+          <div class="chip" data-value="Des formations / coaching">Des formations / coaching</div>
+          <div class="chip" data-value="Du contenu digital">Du contenu digital</div>
+          <div class="chip" data-value="Une application / SaaS">Une application / SaaS</div>
+          <div class="chip" data-value="Je ne sais pas encore">Je ne sais pas encore</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Précisez si vous le souhaitez</label>
+        <div class="hint">Ex : "Des bijoux en argent faits main", "Du coaching en nutrition", "Une app de réservation"…</div>
+        <input type="text" id="q5_detail" placeholder="Décrivez en quelques mots...">
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="goBack()">← Retour</button>
+        <button class="btn-next" onclick="goNext()">Continuer →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="step" data-step="6" data-block="1">
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(232,93,58,0.1);">🎯</div>
+        <h2>Votre client idéal</h2>
+      </div>
+      <p class="step-intro">Décrivez-le comme si c'était une vraie personne. Plus c'est précis, plus votre Business Kit sera pertinent.</p>
+
+      <div class="field">
+        <label>À qui vous adressez-vous ?</label>
+        <div class="hint">Son âge approximatif, ce qu'il fait dans la vie, son problème principal, où il passe du temps…</div>
+        <textarea id="q6" placeholder="Ex : Femmes 30-45 ans, cadres stressées, qui cherchent un rééquilibrage alimentaire. Elles sont actives sur Instagram et lisent des blogs bien-être..."></textarea>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="goBack()">← Retour</button>
+        <button class="btn-next" onclick="goNext()">Continuer →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="step" data-step="7" data-block="1">
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(232,93,58,0.1);">⚡</div>
+        <h2>Votre proposition de valeur</h2>
+      </div>
+      <p class="step-intro">C'est la question la plus importante de tout business plan. Pas besoin d'être parfait — donnez-nous votre intuition.</p>
+
+      <div class="field">
+        <label>Quel problème résolvez-vous ? Pourquoi viendrait-on chez vous plutôt qu'ailleurs ?</label>
+        <div class="hint">Pensez à ce qui vous rend unique : votre approche, votre expérience, un prix, une spécialité…</div>
+        <textarea id="q7" placeholder="Ex : Je propose un accompagnement personnalisé et humain, pas du coaching de masse. Mon expérience de 10 ans en entreprise me donne une crédibilité que d'autres coachs n'ont pas..."></textarea>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="goBack()">← Retour</button>
+        <button class="btn-next" onclick="goNext()">Continuer →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="step" data-step="8" data-block="1">
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(232,93,58,0.1);">👀</div>
+        <h2>Vos concurrents</h2>
+      </div>
+      <p class="step-intro">On ne vous demande pas une étude de marché complète — juste votre premier réflexe.</p>
+
+      <div class="field">
+        <label>Avez-vous identifié des concurrents ou des acteurs similaires ?</label>
+        <div class="hint">Un nom, un site web, un commerce dans votre ville, des comptes Instagram… Tout compte.</div>
+        <textarea id="q8" placeholder="Ex : Il y a 2 salons de thé dans mon quartier mais aucun ne propose de brunch. Sur Instagram, je vois @healthycoach qui fait quelque chose de proche..."></textarea>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="goBack()">← Retour</button>
+        <button class="btn-next" onclick="goNext()">Continuer →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== BLOC 3 : MODÈLE ÉCONOMIQUE ==================== -->
+
+  <!-- Q9 -->
+  <div class="step" data-step="9" data-block="2">
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(42,157,110,0.1);">💰</div>
+        <h2>Comment gagnerez-vous de l'argent ?</h2>
+      </div>
+      <p class="step-intro">On entre dans les chiffres, mais en douceur. Sélectionnez tout ce qui correspond.</p>
+
+      <div class="field">
+        <label>Vos sources de revenus envisagées</label>
+        <div class="chips" data-name="q9" data-multi="true">
+          <div class="chip" data-value="Vente de produits">Vente de produits</div>
+          <div class="chip" data-value="Prestations de service">Prestations de service</div>
+          <div class="chip" data-value="Abonnements">Abonnements</div>
+          <div class="chip" data-value="Formations / cours">Formations / cours</div>
+          <div class="chip" data-value="Commissions / affiliation">Commissions / affiliation</div>
+          <div class="chip" data-value="Je ne sais pas encore">Je ne sais pas encore</div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="goBack()">← Retour</button>
+        <button class="btn-next" onclick="goNext()">Continuer →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="step" data-step="10" data-block="2">
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(42,157,110,0.1);">🏷️</div>
+        <h2>Vos prix</h2>
+      </div>
+      <p class="step-intro">Même une fourchette approximative nous aide à construire votre prévisionnel.</p>
+
+      <div class="field">
+        <label>À combien vendriez-vous votre produit ou service principal ?</label>
+        <div class="hint">Donnez une fourchette si vous hésitez. Si vous n'avez aucune idée, écrivez "je ne sais pas" — on vous proposera des hypothèses.</div>
+        <input type="text" id="q10" placeholder="Ex : entre 40€ et 60€ par séance, ou 25€ le produit">
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="goBack()">← Retour</button>
+        <button class="btn-next" onclick="goNext()">Continuer →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="step" data-step="11" data-block="2">
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(42,157,110,0.1);">📈</div>
+        <h2>Votre objectif de revenu</h2>
+      </div>
+      <p class="step-intro">Projetez-vous dans un an. Ce chiffre nous sert à calibrer votre prévisionnel financier.</p>
+
+      <div class="field">
+        <label>Combien aimeriez-vous gagner par mois dans 12 mois ?</label>
+        <div class="range-display" id="rangeValue">2 000 € <span>/ mois</span></div>
+        <input type="range" id="q11" min="500" max="10000" step="250" value="2000" oninput="updateRange(this)">
+        <div class="range-labels">
+          <span>500 €</span>
+          <span>10 000 €+</span>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="goBack()">← Retour</button>
+        <button class="btn-next" onclick="goNext()">Continuer →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="step" data-step="12" data-block="2">
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(42,157,110,0.1);">🧮</div>
+        <h2>Vos coûts de démarrage</h2>
+      </div>
+      <p class="step-intro">Listez tout ce qui vous vient en tête. On structurera le reste.</p>
+
+      <div class="field">
+        <label>Avez-vous identifié des coûts ou investissements nécessaires ?</label>
+        <div class="hint">Matériel, local, site web, stock, formation, logiciels, assurance… Même approximatif, c'est utile.</div>
+        <textarea id="q12" placeholder="Ex : Un site web (~500€), du stock de départ (~1000€), une formation certifiante (~2000€). Ou bien : aucune idée pour le moment."></textarea>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="goBack()">← Retour</button>
+        <button class="btn-next" onclick="goNext()">Continuer →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== BLOC 4 : CONTEXTE ET MOYENS ==================== -->
+
+  <!-- Q13 -->
+  <div class="step" data-step="13" data-block="3">
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(100,100,200,0.1);">📍</div>
+        <h2>Où en êtes-vous ?</h2>
+      </div>
+      <p class="step-intro">On adapte votre Kit au stade réel de votre projet.</p>
+
+      <div class="field">
+        <label>Quel est votre niveau d'avancement ?</label>
+        <div class="chips" data-name="q13">
+          <div class="chip" data-value="Juste une idée">💭 Juste une idée</div>
+          <div class="chip" data-value="J'ai commencé à me renseigner">🔍 J'ai commencé à me renseigner</div>
+          <div class="chip" data-value="J'ai un début d'activité">🌱 J'ai un début d'activité</div>
+          <div class="chip" data-value="J'ai déjà vendu / testé">✅ J'ai déjà vendu / testé</div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="goBack()">← Retour</button>
+        <button class="btn-next" onclick="goNext()">Continuer →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="step" data-step="14" data-block="3">
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(100,100,200,0.1);">🏦</div>
+        <h2>Votre besoin de financement</h2>
+      </div>
+      <p class="step-intro">Ça oriente le ton de votre Business Kit — un document pour convaincre une banque n'est pas le même qu'un plan pour soi.</p>
+
+      <div class="field">
+        <label>Avez-vous besoin d'un financement ?</label>
+        <div class="chips" data-name="q14" data-multi="true">
+          <div class="chip" data-value="Prêt bancaire">🏦 Prêt bancaire</div>
+          <div class="chip" data-value="Aides France Travail (ARCE/ACRE)">📋 Aides France Travail</div>
+          <div class="chip" data-value="Investisseurs">🤝 Investisseurs</div>
+          <div class="chip" data-value="Crowdfunding">🌐 Crowdfunding</div>
+          <div class="chip" data-value="Pas de financement nécessaire">✋ Pas de financement</div>
+          <div class="chip" data-value="Je ne sais pas encore">🤷 Je ne sais pas</div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="goBack()">← Retour</button>
+        <button class="btn-next" onclick="goNext()">Dernière question →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="step" data-step="15" data-block="3">
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(100,100,200,0.1);">💬</div>
+        <h2>Un dernier mot ?</h2>
+      </div>
+      <p class="step-intro">C'est votre espace libre. Tout ce qui ne rentre pas dans les cases mais qui compte pour vous.</p>
+
+      <div class="field">
+        <label>Y a-t-il autre chose que vous aimeriez nous dire ?</label>
+        <div class="hint">Une précision sur votre projet, une inquiétude, une contrainte particulière, un détail important… Ou rien du tout, c'est OK aussi.</div>
+        <textarea id="q15" placeholder="Ex : Je suis en congé parental et je voudrais lancer mon activité en septembre. Mon budget est très limité pour le moment..."></textarea>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="goBack()">← Retour</button>
+        <button class="btn-submit" onclick="submitForm()">✓ Envoyer mon diagnostic</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ======== REASSURANCE ======== -->
+<div class="reassurance" id="reassurance">
+  <div class="reassurance-inner">
+    <span class="r-icon">💬</span>
+    <p><strong>Pas de panique si c'est flou.</strong> Nos questions sont faites pour vous guider. Répondez avec ce que vous avez — on structure le reste.</p>
+  </div>
+</div>
+
+<!-- ======== SUCCESS SCREEN ======== -->
+<div class="success-screen" id="successScreen">
+  <div class="success-card">
+    <div class="success-emoji">🎉</div>
+    <h2>C'est envoyé !</h2>
+    <p class="sub">Merci <strong id="clientName"></strong>. On a tout ce qu'il nous faut pour construire votre Business Kit sur-mesure.</p>
+
+    <div class="success-timeline">
+      <div class="s-step">
+        <div class="s-num">✓</div>
+        <p><strong>Diagnostic complété</strong> — c'est fait !</p>
+      </div>
+      <div class="s-step">
+        <div class="s-num">⚙️</div>
+        <p><strong>On construit votre Kit</strong> — notre équipe s'y met maintenant.</p>
+      </div>
+      <div class="s-step">
+        <div class="s-num">📬</div>
+        <p><strong>Livraison sous 48h</strong> — directement dans votre boîte mail.</p>
+      </div>
+    </div>
+
+    <div class="success-footer">
+      <span>📩</span>
+      <p>Surveillez votre boîte mail (et vos spams). <strong>On vous envoie tout très vite.</strong></p>
+    </div>
+  </div>
+</div>
+
+<footer>© 2026 — Business Kit · Tous droits réservés</footer>
+
+<script>
+  // ============================================================
+  // STATE
+  // ============================================================
+  let currentStep = 1;
+  const totalSteps = 15;
+  const blockRanges = [
+    { start: 1, end: 4, label: 'Vous' },
+    { start: 5, end: 8, label: 'Votre offre' },
+    { start: 9, end: 12, label: 'Vos chiffres' },
+    { start: 13, end: 15, label: 'Contexte' },
+  ];
+
+  // ============================================================
+  // CHIP SELECTION
+  // ============================================================
+  document.querySelectorAll('.chips').forEach(container => {
+    const isMulti = container.dataset.multi === 'true';
+    container.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        if (isMulti) {
+          chip.classList.toggle('selected');
+        } else {
+          container.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+          chip.classList.toggle('selected');
+        }
+      });
+    });
+  });
+
+  // ============================================================
+  // RANGE SLIDER
+  // ============================================================
+  function updateRange(el) {
+    const val = parseInt(el.value);
+    const display = val >= 10000
+      ? '10 000 €+'
+      : val.toLocaleString('fr-FR') + ' €';
+    document.getElementById('rangeValue').innerHTML = display + ' <span>/ mois</span>';
+  }
+
+  // ============================================================
+  // NAVIGATION
+  // ============================================================
+  function goNext() {
+    if (currentStep >= totalSteps) return;
+    const current = document.querySelector(`.step[data-step="${currentStep}"]`);
+    current.classList.remove('active');
+    currentStep++;
+    const next = document.querySelector(`.step[data-step="${currentStep}"]`);
+    next.classList.remove('active');
+    // Force reflow for animation
+    void next.offsetWidth;
+    next.classList.add('active');
+    updateProgress();
+    scrollToTop();
+  }
+
+  function goBack() {
+    if (currentStep <= 1) return;
+    const current = document.querySelector(`.step[data-step="${currentStep}"]`);
+    current.classList.remove('active');
+    currentStep--;
+    const prev = document.querySelector(`.step[data-step="${currentStep}"]`);
+    prev.classList.add('active');
+    updateProgress();
+    scrollToTop();
+  }
+
+  function updateProgress() {
+    // Fill bar
+    const pct = ((currentStep) / totalSteps) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+
+    // Step text
+    document.getElementById('progressText').textContent = `Question ${currentStep} sur ${totalSteps}`;
+
+    // Block labels
+    const currentBlock = blockRanges.findIndex(b => currentStep >= b.start && currentStep <= b.end);
+    document.querySelectorAll('.progress-label').forEach((label, i) => {
+      label.classList.remove('active', 'done');
+      if (i < currentBlock) label.classList.add('done');
+      if (i === currentBlock) label.classList.add('active');
+    });
+  }
+
+  function scrollToTop() {
+    window.scrollTo({ top: 200, behavior: 'smooth' });
+  }
+
+  // ============================================================
+  // SUBMIT
+  // ============================================================
+  function submitForm() {
+    const prenom = document.getElementById('q1_prenom').value.trim() || 'Futur(e) entrepreneur(e)';
+
+    // Collect all data
+    const formData = collectFormData();
+    console.log('Form data:', formData);
+
+    // ============================================
+    // 👉 ICI : Envoie les données à ton backend
+    // ============================================
+    // Options :
+    // - fetch('/api/submit-diagnostic', { method: 'POST', body: JSON.stringify(formData) })
+    // - Webhook vers Zapier/Make
+    // - API Google Sheets
+    // - Airtable API
+
+    // Show success
+    document.getElementById('formContainer').style.display = 'none';
+    document.getElementById('reassurance').style.display = 'none';
+    document.querySelector('.progress-section').style.display = 'none';
+    document.getElementById('clientName').textContent = prenom;
+    document.getElementById('successScreen').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function collectFormData() {
+    const data = {};
+
+    // Text / textarea / email inputs
+    document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], textarea').forEach(el => {
+      if (el.id) data[el.id] = el.value.trim();
+    });
+
+    // Range
+    const range = document.getElementById('q11');
+    if (range) data.q11_revenu_cible = range.value;
+
+    // Chips
+    document.querySelectorAll('.chips').forEach(container => {
+      const name = container.dataset.name;
+      const selected = Array.from(container.querySelectorAll('.chip.selected')).map(c => c.dataset.value);
+      data[name] = selected;
+    });
+
+    return data;
+  }
+
+  // Init progress
+  updateProgress();
+</script>
+
+</body>
+</html>
