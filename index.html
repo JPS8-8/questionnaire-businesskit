@@ -968,29 +968,50 @@
   // ============================================================
   // SUBMIT
   // ============================================================
-  function submitForm() {
+  async function submitForm() {
+    // IMPORTANT : Remplacez "VOTRE_ID_FORMSPREE" par l'ID de votre formulaire (ex: xbjnrzqy)
+    const FORMSPREE_ENDPOINT = 'https://formspree.io/f/VOTRE_ID_FORMSPREE';
+
     const prenom = document.getElementById('q1_prenom').value.trim() || 'Futur(e) entrepreneur(e)';
+    const submitBtn = document.querySelector('.btn-submit');
+    const originalText = submitBtn.innerHTML;
+    
+    submitBtn.innerHTML = 'Envoi en cours... ⏳';
+    submitBtn.disabled = true;
 
     // Collect all data
     const formData = collectFormData();
-    console.log('Form data:', formData);
+    console.log('Form data envoyée:', formData);
 
-    // ============================================
-    // 👉 ICI : Envoie les données à ton backend
-    // ============================================
-    // Options :
-    // - fetch('/api/submit-diagnostic', { method: 'POST', body: JSON.stringify(formData) })
-    // - Webhook vers Zapier/Make
-    // - API Google Sheets
-    // - Airtable API
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
 
-    // Show success
-    document.getElementById('formContainer').style.display = 'none';
-    document.getElementById('reassurance').style.display = 'none';
-    document.querySelector('.progress-section').style.display = 'none';
-    document.getElementById('clientName').textContent = prenom;
-    document.getElementById('successScreen').classList.add('visible');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (response.ok) {
+        // Show success
+        document.getElementById('formContainer').style.display = 'none';
+        document.getElementById('reassurance').style.display = 'none';
+        document.querySelector('.progress-section').style.display = 'none';
+        document.getElementById('clientName').textContent = prenom;
+        document.getElementById('successScreen').classList.add('visible');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        alert("Oups, un problème est survenu. Avez-vous bien mis votre ID Formspree dans le code ?");
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }
+    } catch (error) {
+      console.error("Erreur d'envoi:", error);
+      alert("Erreur de connexion. Impossible d'envoyer le formulaire.");
+      submitBtn.innerHTML = originalText;
+      submitBtn.disabled = false;
+    }
   }
 
   function collectFormData() {
